@@ -15,7 +15,7 @@ export function classColor(defectClass: string) {
       return "#f59e0b";
     case "scratch":
       return "#0ea5e9";
-    case "dirt":
+    case "stain":
       return "#6b7280";
     case "smash":
       return "#ef4444";

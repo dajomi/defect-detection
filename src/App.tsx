@@ -11,28 +11,11 @@ import type { Detection, SavedHistoryItem } from "./types/detection";
 export default function App() {
   const { payload, connectionState } = useDetectionWebSocket();
 
-  const [threshold, setThresholdState] = useState(0.5);
   const [showBoxes, setShowBoxes] = useState(true);
-  const [paused, setPaused] = useState(false);
   const [history, setHistory] = useState<SavedHistoryItem[]>([]);
 
-  const setThreshold = (value: number) => {
-    setThresholdState(clampThreshold(value));
-  };
 
-const filteredPayload = useMemo(() => {
-  if (!payload) return null;
-
-  const filteredDetections = payload.detections.filter(
-    (det: Detection) => det.score >= threshold
-  );
-
-  return {
-    ...payload,
-    detections: filteredDetections,
-    final_status: getFinalStatus(filteredDetections)
-  };
-}, [payload, threshold]);
+const filteredPayload = payload;
 
 
   const saveSnapshot = () => {
@@ -60,19 +43,14 @@ const filteredPayload = useMemo(() => {
           <VideoPanel
             payload={filteredPayload}
             showBoxes={showBoxes}
-            paused={paused}
           />
         </div>
 
         <div className="right-column">
           <DetectionList payload={filteredPayload} />
           <ControlPanel
-            threshold={threshold}
-            setThreshold={setThreshold}
             showBoxes={showBoxes}
             setShowBoxes={setShowBoxes}
-            paused={paused}
-            setPaused={setPaused}
             onSaveSnapshot={saveSnapshot}
           />
           <HistoryPanel items={history} />

@@ -19,7 +19,7 @@ Jetson Nano + Docker + SSD MobileNet V2 결과를 받아서
 - normal
 - dent
 - smash
-- dirt
+- stain
 - scratch
 
 ---

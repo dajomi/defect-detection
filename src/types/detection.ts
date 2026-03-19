@@ -1,4 +1,4 @@
-export type DefectClass = "normal" | "dent" | "smash" | "dirt" | "scratch";
+export type DefectClass = "normal" | "dent" | "smash" | "stain" | "scratch";
 
 export type Detection = {
   class: Exclude<DefectClass, "normal">;
@@ -11,6 +11,7 @@ export type DetectionPayload = {
   timestamp: string;
   image_width: number;
   image_height: number;
+  image: string;
   detections: Detection[];
   final_status: "normal" | "defect";
 };

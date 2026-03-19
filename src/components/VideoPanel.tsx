@@ -1,25 +1,35 @@
-import { STREAM_URL } from "../config";
 import { classColor } from "../utils/status";
 import type { DetectionPayload } from "../types/detection";
 
 type Props = {
   payload: DetectionPayload | null;
   showBoxes: boolean;
-  paused: boolean;
 };
 
-export default function VideoPanel({ payload, showBoxes, paused }: Props) {
+const defectLabelMap: Record<string, string> = {
+  dent: "찍힘",
+  scratch: "스크래치",
+  stain: "오염",
+  smash: "우그러짐",
+};
+
+export default function VideoPanel({ payload, showBoxes }: Props) {
+  const imageSrc =
+    payload?.image ? `data:image/jpeg;base64,${payload.image}` : null;
+
   return (
     <section className="panel">
       <div className="panel-header">
-        <h2>Live Stream</h2>
+        <h2>실시간 검사 이미지</h2>
       </div>
 
       <div className="video-wrapper">
-        {!paused ? (
-          <img className="video-stream" src={STREAM_URL} alt="Live stream" />
+        {imageSrc ? (
+          <img className="video-stream" src={imageSrc} alt="검사 이미지" />
         ) : (
-          <div className="video-paused">Stream Paused</div>
+          <div className="video-paused">
+            이미지 수신 대기 중
+          </div>
         )}
 
         {showBoxes &&
@@ -40,21 +50,22 @@ export default function VideoPanel({ payload, showBoxes, paused }: Props) {
                   top: `${top}%`,
                   width: `${width}%`,
                   height: `${height}%`,
-                  borderColor: classColor(det.class)
+                  borderColor: classColor(det.class),
                 }}
               >
                 <span
                   className="bbox-label"
                   style={{ backgroundColor: classColor(det.class) }}
                 >
-                  {det.class} {(det.score * 100).toFixed(0)}%
+                  {defectLabelMap[det.class] ?? det.class}{" "}
+                  {(det.score * 100).toFixed(0)}%
                 </span>
               </div>
             );
           })}
 
         <div className="frame-info">
-          Frame: {payload?.frame_id ?? "-"} | Time:{" "}
+          프레임: {payload?.frame_id ?? "-"} | 시간:{" "}
           {payload ? new Date(payload.timestamp).toLocaleTimeString() : "-"}
         </div>
       </div>
