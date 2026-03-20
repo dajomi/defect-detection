@@ -1,13 +1,11 @@
 type Props = {
   showBoxes: boolean;
   setShowBoxes: (value: boolean) => void;
-  onSaveSnapshot: () => void;
 };
 
 export default function ControlPanel({
   showBoxes,
   setShowBoxes,
-  onSaveSnapshot
 }: Props) {
   return (
     <section className="panel">
@@ -26,10 +24,6 @@ export default function ControlPanel({
             />
           </label>
         </div>
-
-        <button className="primary-btn" onClick={onSaveSnapshot}>
-          현재 상황 저장
-        </button>
       </div>
     </section>
   );
