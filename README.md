@@ -1,54 +1,111 @@
-# Defect Detection UI
+# 🚀 불량 검출 실시간 대시보드
 
-Jetson Nano + Docker + SSD MobileNet V2 결과를 받아서
-실시간으로 결함을 표시하는 React 웹앱입니다.
+## 📌 프로젝트 개요
+Jetson 기반의 머신비전 시스템을 활용하여  
+**실시간으로 제품 결함을 탐지하고 웹 대시보드로 시각화하는 시스템**입니다.
 
----
-
-## 1. 프로젝트 목적
-
-이 UI는 다음 기능을 제공합니다.
-
-- 실시간 영상 표시
-- detection bbox 오버레이
-- 결함 종류 및 confidence 표시
-- PASS / FAIL 상태 표시
-- snapshot history 저장
-
-결함 클래스:
-- normal
-- dent
-- smash
-- stain
-- scratch
+카메라에서 입력된 영상은 OpenCV로 처리되고,  
+AI 모델을 통해 결함을 탐지한 뒤 WebSocket으로 프론트엔드에 전달됩니다.
 
 ---
 
-## 2. 폴더 구조
+## 🎯 주요 기능
 
-```text
-ui/
-├─ package.json
-├─ tsconfig.json
-├─ vite.config.ts
-├─ index.html
-├─ .env.example
-├─ src/
-│  ├─ main.tsx
-│  ├─ App.tsx
-│  ├─ index.css
-│  ├─ config.ts
-│  ├─ types/
-│  │  └─ detection.ts
-│  ├─ hooks/
-│  │  └─ useDetectionWebSocket.ts
-│  ├─ components/
-│  │  ├─ Header.tsx
-│  │  ├─ StatusBadge.tsx
-│  │  ├─ VideoPanel.tsx
-│  │  ├─ DetectionList.tsx
-│  │  ├─ ControlPanel.tsx
-│  │  └─ HistoryPanel.tsx
-│  └─ utils/
-│     └─ status.ts
-└─ README.md
+- 📷 **실시간 영상 스트리밍**
+- 🧠 **AI 기반 결함 탐지 (SSD / YOLO 등)**
+- 🟥 **Bounding Box 시각화**
+- 📊 **결함 통계 대시보드**
+  - 결함별 개수
+  - 결함 비율
+- 🔄 **실시간 데이터 전송 (WebSocket)**
+
+---
+
+## 🏗️ 시스템 아키텍처
+
+
+[Camera]
+↓
+[Jetson + OpenCV]
+↓ (frame)
+[AI Model Inference]
+↓ (detection result)
+[WebSocket Server]
+↓
+[React Dashboard]
+
+
+---
+
+## ⚙️ 기술 스택
+
+### 🔹 Backend (Jetson)
+- Python
+- OpenCV
+- PyTorch / ONNX Runtime
+- WebSocket
+
+### 🔹 Frontend
+- React + TypeScript
+- CSS (Custom UI)
+- Recharts (통계 시각화)
+
+---
+
+## 📦 프로젝트 구조
+project/
+│
+├── backend/
+│ ├── camera.py
+│ ├── inference.py
+│ ├── websocket.py
+│
+├── frontend/
+│ ├── src/
+│ │ ├── components/
+│ │ │ ├── VideoPanel.tsx
+│ │ │ ├── DashboardPanel.tsx
+│ │ │ └── ControlPanel.tsx
+│ │ ├── App.tsx
+│ │ └── styles.css
+│
+└── README.md
+
+
+---
+
+## 🔌 실행 방법
+
+### 1️⃣ Backend 실행 (Jetson)
+
+```bash
+cd backend
+python main.py
+2️⃣ Frontend 실행
+cd frontend
+npm install
+npm run dev
+🔗 환경 변수 설정
+
+.env
+
+VITE_WS_URL=ws://<JETSON_IP>:8000/ws/detections
+
+📡 데이터 형식 (WebSocket)
+{
+  "timestamp": 1710000000,
+  "detections": [
+    {
+      "class": "scratch",
+      "confidence": 0.92,
+      "bbox": [x, y, w, h]
+    }
+  ]
+}
+
+🧪 결함 클래스
+클래스	설명
+dent	찍힘
+scratch	스크래치
+stain	오염
+smash	우그러짐
