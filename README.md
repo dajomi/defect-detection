@@ -78,14 +78,7 @@ project/
 
 ## 🔌 실행 방법
 
-### 1️⃣ Backend 실행 (Jetson)
-
-```bash
-cd backend
-python main.py
-```
-
-### 2️⃣ Frontend 실행
+### Frontend 실행
 
 ```bash
 cd frontend
@@ -101,7 +94,6 @@ npm run dev
 
 ```env
 VITE_WS_URL=ws://<JETSON_IP>:8000/ws/detections
-VITE_STREAM_URL=http://<JETSON_IP>:8080/stream
 ```
 
 ---
